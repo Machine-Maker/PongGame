@@ -8,7 +8,6 @@ mainloop = True
 FPS = 60  # desired frame rate in frames per second.
 playtime = 0
 blue = (0, 0, 255)
-score = 0
 
 # ------- background ---------
 background = pygame.Surface(screen.get_size())
@@ -16,8 +15,30 @@ background.fill((100, 155, 200))   # fill the background white (red,green,blue)
 background = background.convert()
 screen.blit(background, (0, 0))   # draw background on screen (overwriting all)
 
-# ------------ player class --------
 all_sprites_list = pygame.sprite.Group()
+# ------- score label -------
+
+
+class ScoreLabel(pygame.sprite.Sprite):
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.font = pygame.font.SysFont("monospace", 15)
+        self.score = 0
+        self.text = "Score: {}".format(self.score)
+        self.color = (0, 0, 0)
+        self.image = None
+
+    def update(self):
+        self.text = "Score: {}".format(self.score)
+        self.image = self.font.render(self.text, 1, self.color)
+
+    def add_one(self):
+        self.score += 1
+
+
+score_label = ScoreLabel()
+# ------------ player class --------
 
 
 class Ball(pygame.sprite.Sprite):
@@ -57,7 +78,7 @@ collision = False
 # --------- mainloop ----------
 while mainloop:
     # do all this each frame
-    milliseconds = clock.tick(FPS)  # do not go faster than this framerate
+    milliseconds = clock.tick(FPS)  # do not go faster than this frame rate
     playtime += milliseconds / 1000.0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -65,6 +86,9 @@ while mainloop:
 
         # ----- clean screen ----------
     screen.blit(background, (0, 0))  # draw background on screen (overwriting all)
+
+    score_label.update()
+    screen.blit(score_label.image, (0, 0))
 
     pos = pygame.mouse.get_pos()
 
@@ -85,9 +109,9 @@ while mainloop:
 
     if pygame.sprite.collide_rect(ball, player):
         if not collision:
-            print("collide")
             dy1 *= -1
             collision = True
+            score_label.add_one()
     elif y1 + radius1 >= screenrect.height:  # change this later
         print("game over")
         break
@@ -103,4 +127,4 @@ while mainloop:
     pygame.display.flip()  # flip the screen FPS times a second
 pygame.quit()
 print("This 'game' was played for {:.2f} seconds.".format(playtime))
-print("score:", score)
+print("score:", score_label.score)
