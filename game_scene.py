@@ -1,5 +1,5 @@
 from scene_utils import Scene
-from pygame import Surface, mouse, font, draw, mixer
+from pygame import Surface, mouse, font, draw, mixer, display
 from pygame.sprite import Sprite, Group, collide_rect
 from game_over_scene import GameOverScene
 import constants as c
@@ -8,7 +8,12 @@ import constants as c
 class GameScene(Scene):
     def __init__(self):
         super().__init__()
-        self.bg = Surface(c.screen_surface.get_size())
+        w_width = int(c.screen_resolution[0])
+        w_height = int(c.screen_resolution[1])
+        c.change_window_location(c.monitor_dimensions[0]/2 - w_width/2, c.monitor_dimensions[1]/2 - w_height/2)
+        self.screen = display.set_mode((w_width, w_height))
+        self.screen_rect = self.screen.get_rect()
+        self.bg = Surface(self.screen.get_size())
         self.bg.convert()
         self.bg.fill((100, 155, 200))
         self.ball = Ball((0, 0, 0), c.radius1)
@@ -17,10 +22,10 @@ class GameScene(Scene):
         self.score_label = ScoreLabel()
         self.game_over = False
 
-    def render(self, screen):
-        screen.blit(self.bg, (0, 0))
-        screen.blit(self.score_label.image, (0, 0))
-        self.sprites_list.draw(c.screen_surface)
+    def render(self):
+        self.screen.blit(self.bg, (0, 0))
+        self.screen.blit(self.score_label.image, (0, 0))
+        self.sprites_list.draw(self.screen)
 
     def update(self):
         self.sprites_list.update(self)
@@ -61,19 +66,19 @@ class Ball(Sprite):
     def update(self, game_scene):
         self.rect.x += self.dx1
         self.rect.y += self.dy1
-        if self.rect.x + 2*c.radius1 >= c.screen_rect.width + 10:
-            self.rect.x = c.screen_rect.width - 2*c.radius1
+        if self.rect.x + 2*c.radius1 >= c.screen_resolution[0] + 10:
+            self.rect.x = c.screen_resolution[0] - 2*c.radius1
             self.dx1 *= -1
         elif self.rect.x <= -10:
             self.rect.x = c.radius1
             self.dx1 *= -1
 
         if collide_rect(self, game_scene.block):
-            if self.dy1 > 0 and self.rect.y + self.rect.height <= 460:
+            if self.dy1 > 0 and self.rect.y + self.rect.height <= c.screen_resolution[1] - c.screen_resolution[1]/10+10:
                 self.dy1 *= -1
                 mixer.music.play(0)
                 game_scene.score_label.add_one()
-        elif self.rect.y >= c.screen_rect.height:
+        elif self.rect.y >= c.screen_resolution[1]:
             c.final_score = game_scene.score_label.score
             game_scene.manager.go_to(GameOverScene())
         elif self.rect.y <= 0:
@@ -87,7 +92,7 @@ class Block(Sprite):
         self.image = Surface([width, height])
         self.image.fill(a_color)
         self.rect = self.image.get_rect()
-        self.rect.y = 450
+        self.rect.y = c.screen_resolution[1] - c.screen_resolution[1]/10
         self.rect.x = 0
 
     def update(self, g_scene):
