@@ -5,3 +5,4 @@ screen_rect = None
 game_over = False
 game_open = True
 final_score = 0
+played_music = False

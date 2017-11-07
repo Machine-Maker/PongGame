@@ -1,5 +1,5 @@
 from scene_utils import Scene
-from pygame import font, KEYDOWN, K_SPACE
+from pygame import font, KEYDOWN, K_SPACE, mixer
 from game_scene import GameScene
 
 
@@ -24,5 +24,6 @@ class TitleScene(Scene):
     def handle_events(self, events):
         for e in events:
             if e.type == KEYDOWN and e.key == K_SPACE:
+                mixer.music.stop()
                 self.manager.go_to(GameScene())
 

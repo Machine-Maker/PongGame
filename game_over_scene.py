@@ -1,5 +1,5 @@
 from scene_utils import Scene
-from pygame import font, KEYDOWN, K_ESCAPE, K_SPACE
+from pygame import font, KEYDOWN, K_ESCAPE, K_SPACE, mixer
 import constants as c
 
 
@@ -7,6 +7,10 @@ class GameOverScene(Scene):
     def __init__(self):
         super().__init__()
         self.font = font.SysFont("Cambria Math", 40, bold=True)
+        if not c.played_music:
+            mixer.music.load("trombone_fail.mp3")
+            mixer.music.play(0)
+            c.played_music = True
 
     def render(self, screen):
         screen.fill((0, 200, 0))
@@ -30,3 +34,4 @@ class GameOverScene(Scene):
                     c.game_open = False
                 elif e.key == K_SPACE:
                     c.game_over = True
+                    c.played_music = False

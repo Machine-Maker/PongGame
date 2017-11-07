@@ -1,5 +1,5 @@
 from scene_utils import Scene
-from pygame import Surface, mouse, font, draw
+from pygame import Surface, mouse, font, draw, mixer
 from pygame.sprite import Sprite, Group, collide_rect
 from game_over_scene import GameOverScene
 import constants as c
@@ -56,6 +56,7 @@ class Ball(Sprite):
         self.rect = self.image.get_rect()
         self.dx1 = 10
         self.dy1 = 10
+        mixer.music.load('computer_boop.wav')
 
     def update(self, game_scene):
         self.rect.x += self.dx1
@@ -70,6 +71,7 @@ class Ball(Sprite):
         if collide_rect(self, game_scene.block):
             if self.dy1 > 0 and self.rect.y + self.rect.height <= 460:
                 self.dy1 *= -1
+                mixer.music.play(0)
                 game_scene.score_label.add_one()
         elif self.rect.y >= c.screen_rect.height:
             c.final_score = game_scene.score_label.score
