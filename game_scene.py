@@ -62,6 +62,7 @@ class Ball(Sprite):
         self.dx1 = 10
         self.dy1 = 10
         mixer.music.load('computer_boop.wav')
+        self.f = None
 
     def update(self, game_scene):
         self.rect.x += self.dx1
@@ -80,6 +81,9 @@ class Ball(Sprite):
                 game_scene.score_label.add_one()
         elif self.rect.y >= c.screen_resolution[1]:
             c.final_score = game_scene.score_label.score
+            self.f = open("highscore.txt", "w")
+            self.f.write(str(c.final_score))
+            self.f.close()
             game_scene.manager.go_to(GameOverScene())
         elif self.rect.y <= 0:
             self.rect.y = c.radius1

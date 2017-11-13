@@ -14,6 +14,15 @@ OPTIONS = [
     "1024x768"
 ]
 
+try:
+    highscore_file = open("highscore.txt", "r")
+    highscore_file.close()
+except FileNotFoundError:
+    highscore_file = open("highscore.txt", "w")
+    highscore_file.write(str(0))
+    highscore_file.close()
+
+
 master = Tk()
 master.title("Resolution Settings")
 c.monitor_dimensions = (master.winfo_screenwidth(), master.winfo_screenheight())

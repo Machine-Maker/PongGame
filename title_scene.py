@@ -14,15 +14,20 @@ class TitleScene(Scene):
         self.screen = display.set_mode((w_width, w_height))
         self.font = font.SysFont("Cambria Math", 40, bold=True)
         self.small_font = font.SysFont("Arial", 24)
+        self.f = open("highscore.txt", "r+")
+        self.highscore = self.f.readline()
+        self.f.close()
 
     def render(self):
         self.screen.fill((0, 200, 0))
         text1 = self.font.render("Pong!", True, (255, 255, 255))
         text2 = self.small_font.render("Made by Jake Potrebic", True, (255, 255, 255))
         text3 = self.font.render("> press space to start <", True, (255, 255, 255))
+        text4 = self.small_font.render("Current Highscore: {}".format(self.highscore), True, (255, 255, 255))
         self.screen.blit(text1, (self.screen.get_width()/2 - text1.get_width()/2, 50))
-        self.screen.blit(text2, (self.screen.get_width()/2 - text2.get_width()/2, 150))
-        self.screen.blit(text3, (self.screen.get_width()/2 - text3.get_width()/2, 350))
+        self.screen.blit(text2, (self.screen.get_width()/2 - text2.get_width()/2, 100))
+        self.screen.blit(text3, (self.screen.get_width()/2 - text3.get_width()/2, 200))
+        self.screen.blit(text4, (self.screen.get_width()/2 - text4.get_width()/2, 250))
 
     def update(self):
         pass
