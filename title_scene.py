@@ -16,6 +16,7 @@ class TitleScene(Scene):
         self.small_font = font.SysFont("Arial", 24)
         self.f = open("highscore.txt", "r+")
         self.highscore = self.f.readline()
+        c.highscore = self.highscore
         self.f.close()
 
     def render(self):

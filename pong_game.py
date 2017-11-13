@@ -16,11 +16,14 @@ OPTIONS = [
 
 try:
     highscore_file = open("highscore.txt", "r")
+    c.highscore = highscore_file.readline()
     highscore_file.close()
 except FileNotFoundError:
     highscore_file = open("highscore.txt", "w")
     highscore_file.write(str(0))
+    print("Generating highscore file...")
     highscore_file.close()
+    c.highscore = 0
 
 
 master = Tk()

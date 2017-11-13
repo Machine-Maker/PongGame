@@ -11,6 +11,7 @@ final_score = 0
 played_music = False
 screen_resolution = None
 monitor_dimensions = None
+highscore = None
 
 
 def change_window_location(x, y):

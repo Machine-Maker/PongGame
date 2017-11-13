@@ -81,8 +81,13 @@ class Ball(Sprite):
                 game_scene.score_label.add_one()
         elif self.rect.y >= c.screen_resolution[1]:
             c.final_score = game_scene.score_label.score
-            self.f = open("highscore.txt", "w")
-            self.f.write(str(c.final_score))
+            self.f = open("highscore.txt", "r")
+            highscore_str = self.f.readline()
+            self.f.close()
+            print(highscore_str[0])
+            if int(highscore_str) < c.final_score:
+                self.f = open("highscore.txt", "w")
+                self.f.write(str(c.final_score))
             self.f.close()
             game_scene.manager.go_to(GameOverScene())
         elif self.rect.y <= 0:
