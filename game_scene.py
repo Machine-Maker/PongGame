@@ -8,10 +8,10 @@ import constants as c
 class GameScene(Scene):
     def __init__(self):
         super().__init__()
-        w_width = int(c.screen_resolution[0])
+        self.w_width = int(c.screen_resolution[0])
         w_height = int(c.screen_resolution[1])
-        c.change_window_location(c.monitor_dimensions[0]/2 - w_width/2, c.monitor_dimensions[1]/2 - w_height/2)
-        self.screen = display.set_mode((w_width, w_height))
+        c.change_window_location(c.monitor_dimensions[0]/2 - self.w_width/2, c.monitor_dimensions[1]/2 - w_height/2)
+        self.screen = display.set_mode((self.w_width, w_height))
         self.screen_rect = self.screen.get_rect()
         self.bg = Surface(self.screen.get_size())
         self.bg.convert()
@@ -24,7 +24,7 @@ class GameScene(Scene):
 
     def render(self):
         self.screen.blit(self.bg, (0, 0))
-        self.screen.blit(self.score_label.image, (0, 0))
+        self.screen.blit(self.score_label.image, (self.w_width/2 - self.score_label.image.get_width()/2, 0))
         self.sprites_list.draw(self.screen)
 
     def update(self):
